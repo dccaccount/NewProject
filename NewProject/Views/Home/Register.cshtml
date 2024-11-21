@@ -1,0 +1,127 @@
+﻿@model NewProject.Models.ProfileModel
+@{
+    ViewBag.Title = "Register";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/CSS/RegisterCSS.css" rel="stylesheet" />
+
+<div style="width: auto; margin-left: 200px;">
+    <div style="width:910px; height:550px; background-color:white;">
+        <center><h3 style="color:brown; font-size:24px; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif">Registration</h3></center>
+        <div class="wrapper">
+            <form action="#">
+                <div class="input-box">
+                    <input type="text" id="txtName" name="txtName" placeholder="Enter your FirstName" required />
+                </div>
+                <div class="input-box">
+                    <input type="text" id="datepicker" placeholder="Enter Your Date of Birth">
+                </div>
+                <div class="input-box">
+                    <input type="text" id="txtEmail" name="txtEmail" placeholder="Enter your Email" required />
+                </div>
+                <div class="input-box">
+                    <input type="text" id="txtPhone" name="txtPhone" placeholder="Enter your Phone Number" required />
+                </div>
+                <div class="input-box">
+                    <input type="text" id="txtAddress" name="txtAddress" placeholder="Enter your Address" required />
+                </div>
+                <div style="width:100%; height:50px;">
+                    <div style="width: 200px; float: left; height: auto; ">
+                        <div class="input-box button">
+                            <input id="btnSubmit" type="Submit" value="Submit">
+                        </div>
+                    </div>
+                </div>
+                <div style="width:100%; height:30px;">
+                    <div style="width: 300px; float: left; height: auto;">
+                        <div class="policy">
+                            <input type="checkbox">
+                            <h3>I accept all terms & condition</h3>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="wrapper">
+            <div id="dataDiv">
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/PScripts/jquery-3.7.1.js"></script>>
+<script src="~/PScripts/jquery-ui.js"></script>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        $('#txtEmail').change(function () {
+            alert($("#txtEmail").val());
+
+            if (validateEmail($("#txtEmail").val())) {
+                alert('given email id is valid');
+                $.ajax({
+                    type: "POST",
+                    url: "/Home/UserEmailValidate",
+                    contentType: "application/json; charset=utf-8",
+                    data: '{ email:' + JSON.stringify($("#txtEmail").val()) + '}',
+                    dataType: "html",
+                    success: function (result, status, xhr) {
+                        if (result == null) {
+                            $("#txtEmail").val('');
+                            alert("this email id is already used please use other email id");
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        $("#dataDiv").html("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText)
+                    }
+                });
+            }
+            else {
+                alert('given email id is not valid');
+            }
+
+
+        });
+
+        $("#btnSubmit").click(function (e) {
+            if ($("#txtName").val() == "" && $("#datepicker").val() == "")
+                alert("Name and Date of Birth details cannot be empty");
+            else if ($("#txtEmail").val() == "" && $("#txtPhone").val() == "")
+                alert("Email,Phone Number cannot be empty");
+            else if ($("#txtAddress").val() == "")
+                alert("Address details cannot be empty");
+            else {
+                var save = [
+                    {
+                        "Name": $("#txtName").val(),
+                        "DOB": $("#datepicker").val(),
+                        "Email": $("#txtEmail").val(),
+                        "Phone": $("#txtPhone").val(),
+                        "Address": $("#txtAddress").val()
+                    }
+                ];
+
+                $.ajax({
+                    type: "POST",
+                    url: "/Home/UserDetails",
+                    contentType: "application/json; charset=utf-8",
+                    data: '{ user:' + JSON.stringify(save) + '}',
+                    dataType: "html",
+                    success: function (result, status, xhr) {
+                        $("#dataDiv").html(result);
+                    },
+                    error: function (xhr, status, error) {
+                        $("#dataDiv").html("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText)
+                    }
+                });
+            }
+            return false;
+        });
+    });
+
+
+
+</script>
+
+

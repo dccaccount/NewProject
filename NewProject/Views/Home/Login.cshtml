@@ -1,0 +1,78 @@
+﻿
+@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/CSS/RegisterCSS.css" rel="stylesheet" />
+
+<div style="width: auto; margin-left: 200px;">
+    <div style="width:910px; height:550px; background-color:white;">
+        <center><h3 style="color:brown; font-size:24px; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif">Registration</h3></center>
+        <div class="wrapper">
+            <form action="#">
+                <div class="input-box">
+                    <input type="text" id="txtLoginID" name="txtLoginID" placeholder="Enter your login id" required />
+                </div>             
+                <div class="input-box">
+                    <input type="text" id="txtPwd" name="txtPwd" placeholder="Enter your password" required />
+                </div>              
+                <div style="width:100%; height:50px;">
+                    <div style="width: 200px; float: left; height: auto; ">
+                        <div class="input-box button">
+                            <input id="btnSubmit" type="Submit" value="Submit">
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="wrapper">
+            <div id="dataDiv">
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/PScripts/jquery-3.7.1.js"></script>>
+<script src="~/PScripts/jquery-ui.js"></script>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+      
+
+        $("#btnSubmit").click(function (e) {
+            if ($("#txtLoginID").val() == "" && $("#txtPwd").val() == "")
+                $("#dataDiv").html("login id and password cannot be empty, please try again");         
+            else {
+                var save = [
+                    {
+                        "Name": $("#txtPwd").val(),
+                        "Email": $("#txtLoginID").val()
+                    }
+                ];
+
+                $.ajax({
+                    type: "POST",
+                    url: "/Home/UserLoginValidate",
+                    contentType: "application/json; charset=utf-8",
+                    data: '{ user:' + JSON.stringify(save) + '}',
+                    dataType: "html",
+                    success: function (result, status, xhr) {
+                        $("#dataDiv").html(result);
+                        if (result != "") {
+                            alert('login success');
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        $("#dataDiv").html("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText)
+                    }
+                });
+            }
+            return false;
+        });
+    });
+
+
+
+</script>
