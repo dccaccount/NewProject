@@ -1,0 +1,10 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/NewProject/obj/Debug/DesignTimeResolveAssemblyReferencesInput.cache
+/NewProject/obj/Debug/NewProject.csproj.AssemblyReference.cache
+/.vs/NewProject/config/applicationhost.config
+/.vs/NewProject/FileContentIndex/54d553f3-3caa-477d-a021-56f243471ab0.vsidx
+/.vs/NP2/v17/.wsuo
+/.vs/NP2/v17/DocumentLayout.json
